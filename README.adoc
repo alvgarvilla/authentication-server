@@ -17,13 +17,13 @@ Spring Ouath2 Authentication Server using Spring Boot. Fully integrated to be us
 
 .Features per environment
 |===
-| - |Dev & Testing |Kubernetes | 
+|  |Dev & Testing |Kubernetes
 
-|Database
+|*Database*
 |H2 In memory database
 |MongoDB
 
-|JWT Encryption
+|*JWT Encryption*
 |Symmetric
 |Asymmetric
 |===
