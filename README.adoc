@@ -1,3 +1,35 @@
-== OAuth2 Authentication Server
+== OAuth2 & JWT Authentication Server
 
+
+=== Stack
+
+* Java 11
+* Spring Boot 2.1.0
+* Spring Cloud Oauth2
+
+* Docker
+* Kubernetes
+* Helm chart
+
+=== Description
+
+Spring Ouath2 Authentication Server using Spring Boot. Fully integrated to be used in local for developing and in a Kubernetes cluster.
+
+.Features per environment
+|===
+| - |Dev & Testing |Kubernetes | 
+
+|Database
+|H2 In memory database
+|MongoDB
+
+|JWT Encryption
+|Symmetric
+|Asymmetric
+|===
+
+
+=== Asymmetric encryption
+
+Usage of private and public keys with a configurable rotation policy using Kubernetes secrets
 
