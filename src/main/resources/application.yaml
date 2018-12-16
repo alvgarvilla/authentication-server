@@ -1,0 +1,73 @@
+server:
+  port: 8888
+  servlet:
+    context-path: /mapview/uaa  
+
+spring:
+  application:
+    name: auth-server
+  profiles:
+    active: local
+  
+---
+spring:
+  profiles: local
+  cloud:
+    kubernetes:
+      enabled: false
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:~/testdb
+    username: sa
+    password: sa
+  jpa:
+    generate-ddl: true # switches the feature on/off
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        show_sql: true
+        dll-auto: update # initialise db using hibernate
+        cache:
+          use_second_level_cache: false
+          provider_class: org.hibernate.cache.NoCacheProvider
+        temp:
+          use_jdbc_metadata_defaults: false
+
+mvg:
+  includeLocalDatabase: true
+  security:
+    jwt-signer:
+      assymetric: false
+      signing-key: PswM@pviewGl0b@l
+    clients:   
+      browser:
+        clientid: browser
+        scopes: ui
+      peril-decorator:
+        clientid: peril-decorator-service
+        clientsecret: PerilDecoratorService123
+        scopes: peril-raw
+      config-server:
+        clientid: config-server
+        clientsecret: ConfigServer123
+        scopes: config-server
+      policy-ingest:
+        clientid: policy-ingest
+        clientsecret: PolicyIngest123
+        scopes: peril-decorator   
+      external-service:
+        clientid: external-service
+        clientsecret: ExternalService123
+        scopes: peril-decorator,geocoder
+      auth-server:
+        clientid: auth-server
+        clientsecret: AuthServer123
+        scopes: auth-server
+
+---
+spring:
+  profiles: kubernetes
+  cloud:
+    kubernetes:
+      reload:
+        enabled: true
