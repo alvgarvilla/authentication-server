@@ -16,7 +16,14 @@ import com.webberis.ms.authenticationserver.exception.WebberisGlobalException;
 import io.fabric8.kubernetes.api.model.Secret;
 import io.fabric8.kubernetes.client.AutoAdaptableKubernetesClient;
 
-public class JwtKubernetesSecret {
+/**
+ * This class provides functionality for validating, updating and cleaning the Kubernetes secret that stores 
+ * KeyPair data.
+ * 
+ * @author Alvaro Garcia
+ *
+ */
+public class KeyPairKubernetesSecret {
 	
     private final static String JKS_FORMAT = "%d-%d.jks";
     private final static String PASS_FORMAT = "%d-%d.pass";
@@ -25,8 +32,8 @@ public class JwtKubernetesSecret {
     private AutoAdaptableKubernetesClient adp;
     private String secret;
     
-    public JwtKubernetesSecret(AutoAdaptableKubernetesClient adp, String secret) {
-        this.adp = adp;
+    public KeyPairKubernetesSecret(String secret) {
+        this.adp = new AutoAdaptableKubernetesClient();
         this.secret = secret;
     }
     
