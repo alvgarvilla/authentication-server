@@ -96,7 +96,7 @@ public class KeyPairFile {
     private static X509Certificate generateCertificate(KeyPair keyPair) throws Exception {
         SubjectPublicKeyInfo publicKeyInfo = SubjectPublicKeyInfo.getInstance(keyPair.getPublic().getEncoded());
         
-        X500Name issuer = new X500Name("CN=MapviewGlobalLexisNexis");
+        X500Name issuer = new X500Name("CN=Webberis");
         
         Instant now = Instant.now();
         Date notBefore = Date.from(now);
@@ -105,7 +105,7 @@ public class KeyPairFile {
         X509v3CertificateBuilder certif = new X509v3CertificateBuilder(issuer, BigInteger.valueOf(now.toEpochMilli()), 
                 notBefore, notAfter, issuer, publicKeyInfo);
         
-        ContentSigner sigGen = new JcaContentSignerBuilder("SHA1WithRSA").build(keyPair.getPrivate());
+        ContentSigner sigGen = new JcaContentSignerBuilder("SHA512WITHRSA").build(keyPair.getPrivate());
         
         X509CertificateHolder certHolder = certif.build(sigGen);
         
