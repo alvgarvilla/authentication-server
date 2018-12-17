@@ -64,12 +64,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Bean
 	public JwtAccessTokenConverter accessTokenConverter() {
 		JwtAccessTokenConverter tokenConverter;
-		boolean isAssymEncrypt = Boolean.valueOf(env.getProperty("mvg.security.jwt-signer.assymetric"));
+		boolean isAssymEncrypt = Boolean.valueOf(env.getProperty("security.jwtSigner.assymetric"));
 		if (isAssymEncrypt) {
-			tokenConverter = new AsymmetricTokenConverter(env.getProperty("mvg.security.jwt-signer.ks-path"),
-					env.getProperty("mvg.security.jwt-signer.ks-alias"));
+			tokenConverter = new AsymmetricTokenConverter(env.getProperty("security.jwtSigner.ksPath"),
+					env.getProperty("security.jwtSigner.ksAlias"));
 		} else {
-			tokenConverter = new SymmetricTokenConverter(env.getProperty("mvg.security.jwt-signer.signing-key"));
+			tokenConverter = new SymmetricTokenConverter(env.getProperty("security.jwtSigner.signingKey"));
 		}
 		return tokenConverter;
 	}

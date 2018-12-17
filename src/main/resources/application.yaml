@@ -1,11 +1,11 @@
 server:
   port: 8888
   servlet:
-    context-path: /mapview/uaa  
+    context-path: /uaa  
 
 spring:
   application:
-    name: auth-server
+    name: authentication-server
   profiles:
     active: local
   
@@ -33,13 +33,14 @@ spring:
         temp:
           use_jdbc_metadata_defaults: false
 
-mvg:
-  includeLocalDatabase: true
-  security:
-    jwt-signer:
-      assymetric: false
-      signing-key: PswM@pviewGl0b@l
-    clients:   
+ 
+includeLocalDatabase: true
+  
+security:
+  jwtSigner:
+    assymetric: false
+    signingKey: ChangeMe
+    clients:
       browser:
         clientid: browser
         scopes: ui
@@ -47,22 +48,6 @@ mvg:
         clientid: peril-decorator-service
         clientsecret: PerilDecoratorService123
         scopes: peril-raw
-      config-server:
-        clientid: config-server
-        clientsecret: ConfigServer123
-        scopes: config-server
-      policy-ingest:
-        clientid: policy-ingest
-        clientsecret: PolicyIngest123
-        scopes: peril-decorator   
-      external-service:
-        clientid: external-service
-        clientsecret: ExternalService123
-        scopes: peril-decorator,geocoder
-      auth-server:
-        clientid: auth-server
-        clientsecret: AuthServer123
-        scopes: auth-server
 
 ---
 spring:

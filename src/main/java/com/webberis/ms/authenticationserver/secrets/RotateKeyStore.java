@@ -73,8 +73,8 @@ public class RotateKeyStore {
     }
     
     private void generateAndUpdateKey(Secret secret, Integer week, Integer year) {
-        KeyPairFile kpFile = new KeyPairFile(env.getProperty("mvg.security.jwt-signer.ks-alias"));
-        String pubKeySecret = env.getProperty("mvg.security.jwt-signer.k8s-pub-secret-name");
+        KeyPairFile kpFile = new KeyPairFile(env.getProperty("security.jwtSigner.ksAlias"));
+        String pubKeySecret = env.getProperty("security.jwtSigner.k8sPubSecretName");
         this.jxtK8sSecret.updateSecret(secret, kpFile, pubKeySecret, week, year);
     }
     

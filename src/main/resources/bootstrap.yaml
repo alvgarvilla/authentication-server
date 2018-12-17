@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: authentication-server
+  profiles:
+      active: local
+---
+spring:
+  profiles: test
+  cloud:
+    kubernetes:
+      enabled: false
+      discovery:
+        enabled: false  
+---
+spring:
+  profiles: local
+  cloud:
+    kubernetes:
+      enabled: false
+      discovery:
+        enabled: false
+---
+spring:
+  profiles: kubernetes
+  cloud:
+    kubernetes:
+      reload:
+        enabled: true
