@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.webberis.ms.authenticationserver.exception.KeySecretNotFoundException;
@@ -51,8 +52,12 @@ public abstract class SecretServiceAbstract implements SecretService {
     }
     
     protected static void cleanData(Map<String, String> map, Integer week, Integer year) throws KeySecretNotFoundException {
-        map.remove(jksFormat(week, year));
-        map.remove(passFormat(week, year));
+        if (map == null) {
+            map = new HashMap<>();
+        } else {
+            map.remove(jksFormat(week, year));
+            map.remove(passFormat(week, year));    
+        }
     }
 
 }

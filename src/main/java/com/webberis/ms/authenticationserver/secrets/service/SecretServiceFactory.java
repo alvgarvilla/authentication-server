@@ -6,14 +6,14 @@ import com.webberis.ms.authenticationserver.secrets.service.impl.KubernetesSecre
 /**
  * SecretService factory that creates the proper instance depending on the service name.
  * 
- * @author alvaro
+ * @author Alvaro Garcia
  *
  */
 public class SecretServiceFactory {
     
-    public static SecretService getInstance(String profile) {
+    public static SecretService getInstance(String profile, String aliasName) {
         if (profile.equalsIgnoreCase("kubernetes")) {
-            return new KubernetesSecretService();
+            return new KubernetesSecretService(aliasName);
         } else {
             throw new WebberisGlobalException("Invalid secret service name -> " + profile);
         }
