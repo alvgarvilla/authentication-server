@@ -10,9 +10,9 @@ public interface SecretService {
      * @param secretName
      * @throws SecretNotFoundException
      */
-    void validateSecret(String secretName) throws SecretNotFoundException;
+    void validateSecrets(String ksSecretName, String publicSecretName) throws SecretNotFoundException;
     
     void done();
     
-    void cleanAndGenerateSecret(String ksSecretName, String publicSecretName, String alias);
+    void cleanAndGenerateSecret(String ksSecretName, String publicSecretName);
 }

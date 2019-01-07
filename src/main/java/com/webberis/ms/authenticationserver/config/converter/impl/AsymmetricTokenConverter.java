@@ -9,7 +9,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
 import com.webberis.ms.authenticationserver.config.converter.AbstractTokenConverter;
-import com.webberis.ms.authenticationserver.secrets.KeyPairKubernetesSecret;
+import com.webberis.ms.authenticationserver.secrets.service.SecretServiceAbstract;
 
 public class AsymmetricTokenConverter extends AbstractTokenConverter {
 
@@ -38,11 +38,11 @@ public class AsymmetricTokenConverter extends AbstractTokenConverter {
     }
 
     public FileSystemResource createKSResource(Integer week, Integer year) throws IOException {
-        return new FileSystemResource(this.path + "/" + KeyPairKubernetesSecret.jksFormat(week, year));
+        return new FileSystemResource(this.path + "/" + SecretServiceAbstract.jksFormat(week, year));
     }
 
     public FileSystemResource createPassResource(Integer week, Integer year) throws IOException {
-        return new FileSystemResource(this.path + "/" + KeyPairKubernetesSecret.passFormat(week, year));
+        return new FileSystemResource(this.path + "/" + SecretServiceAbstract.passFormat(week, year));
     }
 
     public KeyStoreKeyFactory createKeyStoreKeyFactory(FileSystemResource jksResource, Integer week, Integer year)

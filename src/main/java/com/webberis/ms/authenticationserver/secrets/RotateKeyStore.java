@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.webberis.ms.authenticationserver.exception.KeySecretNotFoundException;
 import com.webberis.ms.authenticationserver.exception.SecretNotFoundException;
 import com.webberis.ms.authenticationserver.secrets.service.SecretService;
 import com.webberis.ms.authenticationserver.secrets.service.SecretServiceFactory;
@@ -46,11 +45,7 @@ public class RotateKeyStore {
         LOGGER.info("KeyRotation verification");
         SecretService secretService = SecretServiceFactory.getInstance(profile, ksAlias);
         try {
-            secretService.validateSecret(ksSecretName);
-            secretService.validateSecret(pubSecretName);
-        } catch (KeySecretNotFoundException e) {
-            LOGGER.error(e.getMessage());
-            secretService.cleanAndGenerateSecret(ksSecretName, pubSecretName, ksAlias);
+            secretService.validateSecrets(ksSecretName, pubSecretName);
         } catch (SecretNotFoundException e) {
             LOGGER.error("----------------- SECRET NOT FOUND --------------");
         } finally {

@@ -32,13 +32,12 @@ public class KubernetesSecretService extends SecretServiceAbstract {
     }
 
     @Override
-    public void validateSecret(String secretName) throws SecretNotFoundException {
-        Secret secret = this.byName(secretName).orElseThrow(() -> new SecretNotFoundException());
-        if (secret.getData() == null) {
-            secret.setData(new HashMap<>());
-        }
-        this.validateActualWeek(secret);
-        this.validateNextWeek(secret);
+    public void validateSecrets(String ksSecretName, String pubSecretName) throws SecretNotFoundException {
+        Secret ksSecret = this.byName(ksSecretName).orElseThrow(() -> new SecretNotFoundException());
+        Secret pubSecret = this.byName(pubSecretName).orElseThrow(() -> new SecretNotFoundException());
+        
+        validateActualWeek(ksSecret, pubSecret);
+        validateNextWeek(ksSecret, pubSecret);
     }
     
     @Override
@@ -47,13 +46,23 @@ public class KubernetesSecretService extends SecretServiceAbstract {
     }
     
     @Override
-    public void cleanAndGenerateSecret(String ksSecretName, String publicSecretName, String alias) {
+    public void cleanAndGenerateSecret(String ksSecretName, String publicSecretName) {
         Secret ksSecret = this.byName(ksSecretName).orElseThrow(() -> new SecretNotFoundException());
         cleanData(ksSecret.getData(), this.week - 1, this.year);
         
-        Secret pubSecret = this.byName(ksSecretName).orElseThrow(() -> new SecretNotFoundException());
+        Secret pubSecret = this.byName(publicSecretName).orElseThrow(() -> new SecretNotFoundException());
         cleanData(pubSecret.getData(), this.week - 1, this.year);
         
+        KeyPairFile kpFile = new KeyPairFile(this.aliasName);
+        
+        this.updateSecretsByName(ksSecret, pubSecret, kpFile, week, year);
+    }
+    
+    private void cleanAndUpdateSecrets(Secret ksSecret, Secret pubSecret, boolean cleanPrev, Integer week, Integer year) {
+        if (cleanPrev) {
+            cleanData(ksSecret.getData(), week - 1, year);
+            cleanData(pubSecret.getData(), week - 1, year);
+        }
         KeyPairFile kpFile = new KeyPairFile(this.aliasName);
         
         this.updateSecretsByName(ksSecret, pubSecret, kpFile, week, year);
@@ -79,27 +88,26 @@ public class KubernetesSecretService extends SecretServiceAbstract {
         return this.adp.secrets().list().getItems();
     }
     
-    /**
-     * @param secret
-     */
-    private void validateActualWeek(Secret secret) {
+    private void validateActualWeek(Secret ksSecret, Secret pubSecret) {
         try {
-            validateData(secret.getData(), this.week, this.year);
+            validateData(ksSecret.getData(), week, year);
         } catch (KeySecretNotFoundException e) {
-            throw new KeySecretNotFoundException("Actual week key not found. Generating it");
-        } 
-    }
-    
-    private void validateNextWeek(Secret secret) {
-        try {
-            validateData(secret.getData(), this.week + 1, this.year);
-        } catch (KeySecretNotFoundException e) {
-            throw new KeySecretNotFoundException("Next week key not found. Generating it");
+            cleanAndUpdateSecrets(ksSecret, pubSecret, true, week, year);
         }
     }
     
+    private void validateNextWeek(Secret ksSecret, Secret pubSecret) {
+        try {
+            validateData(ksSecret.getData(), week + 1, year);
+        } catch (KeySecretNotFoundException e) {
+            cleanAndUpdateSecrets(ksSecret, pubSecret, false, week + 1, year);
+        }
+    }
+        
     public static void validateData(Map<String, String> map, Integer week, Integer year) throws KeySecretNotFoundException {
-        if (!map.containsKey(jksFormat(week, year)) || !map.containsKey(passFormat(week, year))) {
+        if (map == null) {
+            map = new HashMap<>();
+        } else if (!map.containsKey(jksFormat(week, year)) || !map.containsKey(passFormat(week, year))) {
             throw new KeySecretNotFoundException();
         }
     }

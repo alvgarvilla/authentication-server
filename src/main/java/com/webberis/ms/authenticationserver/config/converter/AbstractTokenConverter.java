@@ -42,7 +42,7 @@ public abstract class AbstractTokenConverter extends JwtAccessTokenConverter {
         return super.enhance(accessToken, authentication);
     }
     
-    private Map<String, Object> attachAdditionalInfo(final OAuth2Authentication authentication) {
+    private static Map<String, Object> attachAdditionalInfo(final OAuth2Authentication authentication) {
         final Map<String, Object> additionalInfo = new HashMap<String, Object>();
         return additionalInfo;
     }

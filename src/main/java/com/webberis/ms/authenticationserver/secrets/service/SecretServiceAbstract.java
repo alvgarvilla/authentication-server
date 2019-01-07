@@ -39,11 +39,11 @@ public abstract class SecretServiceAbstract implements SecretService {
         return bytes;
     }
     
-    protected static String jksFormat(Integer week, Integer year) {
+    public static String jksFormat(Integer week, Integer year) {
         return String.format(JKS_FORMAT, week, year);
     }
     
-    protected static String passFormat(Integer week, Integer year) {
+    public static String passFormat(Integer week, Integer year) {
         return String.format(PASS_FORMAT, week, year);
     }
     
