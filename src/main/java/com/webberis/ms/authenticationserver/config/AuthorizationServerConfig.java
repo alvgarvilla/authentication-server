@@ -4,6 +4,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +22,7 @@ import com.webberis.ms.authenticationserver.config.converter.impl.AsymmetricToke
 import com.webberis.ms.authenticationserver.config.converter.impl.SymmetricTokenConverter;
 import com.webberis.ms.authenticationserver.service.UserService;
 
+@Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
@@ -38,8 +40,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-		endpoints.authenticationManager(authenticationManager).tokenStore(tokenStore())
-				.tokenEnhancer(accessTokenConverter()).userDetailsService(userService);
+		endpoints.authenticationManager(authenticationManager)
+		        .tokenStore(tokenStore())
+				.tokenEnhancer(accessTokenConverter())
+				.userDetailsService(userService);
 	}
 
 	@Override
