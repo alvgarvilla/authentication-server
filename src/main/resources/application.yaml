@@ -39,7 +39,6 @@ includeLocalDatabase: true
 security:
   jwtSigner:
     asymmetric: false
-    rotateKey: true
     signingKey: ChangeMe
     clients:
       browser:
