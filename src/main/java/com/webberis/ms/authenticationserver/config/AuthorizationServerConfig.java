@@ -1,6 +1,6 @@
 package com.webberis.ms.authenticationserver.config;
 
-import javax.sql.DataSource;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,13 +32,15 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	private AuthenticationManager authenticationManager;
 
 	@Autowired
-	private DataSource dataSource;
-	
-	@Autowired
 	private UserService userService;
 	
 	@Autowired
 	private Environment env;
+	
+	@Autowired
+	private SecurityProperties securityProperties;
+	
+    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
@@ -50,7 +52,19 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.jdbc(dataSource).passwordEncoder(new BCryptPasswordEncoder());
+		
+		List<String> cs = securityProperties.getClients();
+		
+		System.out.println(cs.toArray().toString());
+		
+		clients.inMemory()
+			.withClient("test")
+			.secret("{bcrypt}".concat(passwordEncoder.encode("test123")))
+			.autoApprove(true)
+			.authorizedGrantTypes("client_credentials")
+			.scopes("test_scope");
+		
+		//clients.jdbc(dataSource).passwordEncoder(new BCryptPasswordEncoder());
 	}
 
 	@Bean

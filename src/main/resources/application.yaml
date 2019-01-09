@@ -33,21 +33,17 @@ spring:
         temp:
           use_jdbc_metadata_defaults: false
 
- 
-includeLocalDatabase: true
-  
+
 security:
   jwtSigner:
     asymmetric: false
     signingKey: ChangeMe
-    clients:
-      browser:
-        clientid: browser
-        scopes: ui
-      peril-decorator:
-        clientid: peril-decorator-service
-        clientsecret: PerilDecoratorService123
-        scopes: peril-raw
+  clients:
+  - name: browser
+    scopes: ui
+  - name: searchService
+    clientSecret: SearchService123
+    scopes: search
 
 ---
 spring:
