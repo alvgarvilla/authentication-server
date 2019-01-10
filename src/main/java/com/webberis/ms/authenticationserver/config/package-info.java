@@ -1,7 +1,7 @@
+
 /**
+ * This package contains classes for configuring the Authentication Server
  * 
- */
-/**
  * @author alvaro
  *
  */

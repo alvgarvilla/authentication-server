@@ -35,15 +35,9 @@ spring:
 
 
 security:
-  jwtSigner:
+  jwt-signer:
     asymmetric: false
-    signingKey: ChangeMe
-  clients:
-  - name: browser
-    scopes: ui
-  - name: searchService
-    clientSecret: SearchService123
-    scopes: search
+    signing-key: ChangeMe
 
 ---
 spring:

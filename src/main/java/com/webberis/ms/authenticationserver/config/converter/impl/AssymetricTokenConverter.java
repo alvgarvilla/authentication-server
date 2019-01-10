@@ -11,12 +11,12 @@ import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFacto
 import com.webberis.ms.authenticationserver.config.converter.AbstractTokenConverter;
 import com.webberis.ms.authenticationserver.secrets.service.SecretServiceAbstract;
 
-public class AsymmetricTokenConverter extends AbstractTokenConverter {
+public class AssymetricTokenConverter extends AbstractTokenConverter {
 
     private final String path;
     private final String alias;
 
-    public AsymmetricTokenConverter(String path, String alias) {
+    public AssymetricTokenConverter(String path, String alias) {
         this.path = path;
         this.alias = alias;
     }

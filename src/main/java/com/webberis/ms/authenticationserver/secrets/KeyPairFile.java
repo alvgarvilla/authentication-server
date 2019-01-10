@@ -24,6 +24,12 @@ import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 
 import com.webberis.ms.authenticationserver.exception.WebberisGlobalException;
 
+/**
+ * Object for generating the KeyPair file to be used for signing the tokens
+ * 
+ * @author alvgarvilla
+ *
+ */
 public class KeyPairFile {
 	
     private File jksFile;

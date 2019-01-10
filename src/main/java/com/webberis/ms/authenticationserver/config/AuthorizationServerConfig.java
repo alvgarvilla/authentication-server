@@ -1,13 +1,10 @@
 package com.webberis.ms.authenticationserver.config;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -19,7 +16,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
-import com.webberis.ms.authenticationserver.config.converter.impl.AsymmetricTokenConverter;
+import com.webberis.ms.authenticationserver.config.converter.impl.AssymetricTokenConverter;
 import com.webberis.ms.authenticationserver.config.converter.impl.SymmetricTokenConverter;
 import com.webberis.ms.authenticationserver.service.UserService;
 
@@ -35,10 +32,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	private UserService userService;
 	
 	@Autowired
-	private Environment env;
-	
-	@Autowired
-	private SecurityProperties securityProperties;
+	private JwtSignerProperty jwtSignerProperties;
 	
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -53,18 +47,18 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		
-		List<String> cs = securityProperties.getClients();
-		
-		System.out.println(cs.toArray().toString());
-		
 		clients.inMemory()
+			.withClient("web")
+			.secret("{bcrypt}".concat(passwordEncoder.encode("web123")))
+			.autoApprove(true)
+			.authorizedGrantTypes("implicit","refresh_token", "password", "authorization_code")
+			.scopes("web")
+		.and()
 			.withClient("test")
 			.secret("{bcrypt}".concat(passwordEncoder.encode("test123")))
 			.autoApprove(true)
 			.authorizedGrantTypes("client_credentials")
 			.scopes("test_scope");
-		
-		//clients.jdbc(dataSource).passwordEncoder(new BCryptPasswordEncoder());
 	}
 
 	@Bean
@@ -84,12 +78,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Bean
 	public JwtAccessTokenConverter accessTokenConverter() {
 		JwtAccessTokenConverter tokenConverter;
-		boolean isAssymEncrypt = Boolean.valueOf(env.getProperty("security.jwtSigner.assymetric"));
-		if (isAssymEncrypt) {
-			tokenConverter = new AsymmetricTokenConverter(env.getProperty("security.jwtSigner.ksPath"),
-					env.getProperty("security.jwtSigner.ksAlias"));
+		if (jwtSignerProperties.isAssymetric()) {
+			tokenConverter = new AssymetricTokenConverter(jwtSignerProperties.getKsPath(),
+					jwtSignerProperties.getKsAlias());
 		} else {
-			tokenConverter = new SymmetricTokenConverter(env.getProperty("security.jwtSigner.signingKey"));
+			tokenConverter = new SymmetricTokenConverter(jwtSignerProperties.getSigningKey());
 		}
 		return tokenConverter;
 	}
